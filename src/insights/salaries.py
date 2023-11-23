@@ -21,7 +21,17 @@ class ProcessSalaries(ProcessJobs):
         return min(salary_list)
 
     def matches_salary_range(self, job: Dict, salary: Union[int, str]) -> bool:
-        pass
+        if 'min_salary' not in job or 'max_salary' not in job:
+            raise ValueError
+        min_salary = job['min_salary']
+        max_salary = job['max_salary']
+        if type(salary) is not int and type(salary) is not str:
+            raise ValueError
+        if not str(min_salary).isnumeric() or not str(max_salary).isnumeric():
+            raise ValueError
+        if (int(min_salary) > int(max_salary)):
+            raise ValueError
+        return int(min_salary) <= int(salary) <= int(max_salary)
 
     def filter_by_salary_range(
         self, jobs: List[dict], salary: Union[str, int]
